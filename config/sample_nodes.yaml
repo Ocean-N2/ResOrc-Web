@@ -1,0 +1,25 @@
+nodes:
+  - node_id: "trex-01"
+    host: "10.20.0.11"
+    port: 4501
+    role: "trex"
+    max_rate_mbps: 1000
+    auth_token: "trex01-secret-token"
+  - node_id: "trex-02"
+    host: "10.20.0.12"
+    port: 4502
+    role: "trex"
+    max_rate_mbps: 1200
+    auth_token: "trex02-secret-token"
+  - node_id: "mhddos-01"
+    host: "10.20.0.21"
+    port: 5501
+    role: "mhddos"
+    max_rate_mbps: 800
+    auth_token: "mhddos01-secret-token"
+  - node_id: "mhddos-02"
+    host: "10.20.0.22"
+    port: 5502
+    role: "mhddos"
+    max_rate_mbps: 900
+    auth_token: "mhddos02-secret-token"

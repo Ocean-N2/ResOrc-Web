@@ -1,0 +1,78 @@
+campaign_id: "CAMP-2026-04-18"
+name: "Infrastructure Resilience Test"
+description: "Multi-vector DDoS simulation testing edge and origin defenses"
+global_max_rate_mbps: 2000
+abort_threshold_mbps: 2500
+
+nodes:
+  - node_id: "trex-01"
+    host: "10.20.0.11"
+    port: 4501
+    role: "trex"
+    max_rate_mbps: 1000
+    auth_token: "trex01-secret-token"
+  - node_id: "trex-02"
+    host: "10.20.0.12"
+    port: 4502
+    role: "trex"
+    max_rate_mbps: 1200
+    auth_token: "trex02-secret-token"
+  - node_id: "mhddos-01"
+    host: "10.20.0.21"
+    port: 5501
+    role: "mhddos"
+    max_rate_mbps: 800
+    auth_token: "mhddos01-secret-token"
+  - node_id: "mhddos-02"
+    host: "10.20.0.22"
+    port: 5502
+    role: "mhddos"
+    max_rate_mbps: 900
+    auth_token: "mhddos02-secret-token"
+
+phases:
+  - phase_id: "phase-1"
+    name: "TCP Baseline"
+    attack_mode: "tcp_flood"
+    targets: ["192.168.1.100", "10.0.0.50:443"]
+    duration_seconds: 120
+    rate: "800Mbps"
+    ramp_up_seconds: 30
+    ramp_down_seconds: 10
+    node_ids: ["trex-01", "trex-02"]
+  - phase_id: "phase-2"
+    name: "SYN Flood Escalation"
+    attack_mode: "syn_flood"
+    targets: ["192.168.1.100", "203.0.113.0/24"]
+    duration_seconds: 180
+    rate: "1.2Gbps"
+    ramp_up_seconds: 45
+    ramp_down_seconds: 15
+    node_ids: ["trex-01", "trex-02"]
+  - phase_id: "phase-3"
+    name: "HTTP Layer-7 Flood"
+    attack_mode: "http_flood"
+    targets: ["https://target-app.example.com", "https://api.example.com:8443/health"]
+    duration_seconds: 150
+    rate: "600Mbps"
+    ramp_up_seconds: 20
+    ramp_down_seconds: 10
+    node_ids: ["mhddos-01", "mhddos-02"]
+  - phase_id: "phase-4"
+    name: "DNS Amplification"
+    attack_mode: "dns_amp"
+    targets: ["192.168.1.100", "cdn.example.com:8080"]
+    duration_seconds: 120
+    rate: "1.5Gbps"
+    ramp_up_seconds: 30
+    ramp_down_seconds: 10
+    node_ids: ["trex-01", "trex-02", "mhddos-01", "mhddos-02"]
+  - phase_id: "phase-5"
+    name: "Combined Assault"
+    attack_mode: "tcp_flood"
+    targets: ["192.168.1.100", "10.0.0.50:443", "https://target-app.example.com"]
+    duration_seconds: 200
+    rate: "1.8Gbps"
+    ramp_up_seconds: 60
+    ramp_down_seconds: 20
+    node_ids: ["trex-01", "trex-02", "mhddos-01", "mhddos-02"]
