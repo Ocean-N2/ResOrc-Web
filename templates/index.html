@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Resilience Orchestrator v2.2</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d1117;color:#c9d1d9;overflow-x:hidden}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#30363d;border-radius:3px}
+:root{--bg:#0d1117;--card:#161b22;--card2:#1c2333;--border:#30363d;--text:#c9d1d9;--text2:#8b949e;
+--accent:#58a6ff;--cyan:#39d2c0;--green:#3fb950;--red:#f85149;--yellow:#d29922;--purple:#bc8cff;--orange:#f0883e}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;background:#161b22;
+border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.topbar .brand{display:flex;align-items:center;gap:12px}
+.topbar .brand h1{font-size:18px;font-weight:700;color:var(--cyan)}
+.topbar .brand span{font-size:12px;color:var(--text2);padding:2px 8px;background:#1c2333;border-radius:4px}
+.topbar .controls{display:flex;align-items:center;gap:16px}
+.status-badge{padding:4px 12px;border-radius:12px;font-size:12px;font-weight:600}
+.status-idle{background:#1c2333;color:var(--text2)}
+.status-running{background:#1a3a1a;color:var(--green);animation:pulse 1.5s infinite}
+.status-done{background:#1a2a3a;color:var(--accent)}
+.kill-btn{padding:8px 20px;background:var(--red);color:#fff;border:none;border-radius:6px;
+font-size:14px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:1px;transition:all .2s}
+.kill-btn:hover{background:#da3633;transform:scale(1.05)}.kill-btn:active{transform:scale(0.95)}
+.kill-btn.pulsing{animation:killpulse 0.8s infinite}
+@keyframes killpulse{0%,100%{box-shadow:0 0 0 0 rgba(248,81,73,.6)}50%{box-shadow:0 0 0 12px rgba(248,81,73,0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.layout{display:flex;min-height:calc(100vh - 53px)}
+.sidebar{width:220px;background:#161b22;border-right:1px solid var(--border);padding:16px 12px;flex-shrink:0}
+.main{flex:1;padding:20px 24px;overflow-y:auto}
+.sidebar h3{font-size:11px;text-transform:uppercase;color:var(--text2);margin:16px 0 8px;letter-spacing:1px}
+.sidebar h3:first-child{margin-top:0}
+.sb-btn{display:block;width:100%;padding:8px 12px;margin-bottom:4px;background:transparent;
+border:1px solid transparent;border-radius:6px;color:var(--text);font-size:13px;text-align:left;cursor:pointer;transition:all .15s}
+.sb-btn:hover{background:#1c2333;border-color:var(--border)}
+.sb-btn.primary{background:#1a3a1a;border-color:#238636;color:var(--green)}
+.sb-btn.primary:hover{background:#238636;color:#fff}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px}
+.tab{padding:10px 20px;font-size:13px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s}
+.tab:hover{color:var(--text)}.tab.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+.tab-content{display:none}.tab-content.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin-bottom:16px}
+.card h2{font-size:15px;color:var(--cyan);margin-bottom:12px;font-weight:600}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.stat{text-align:center;padding:12px}.stat .val{font-size:24px;font-weight:700;color:var(--accent)}
+.stat .lbl{font-size:11px;color:var(--text2);margin-top:4px;text-transform:uppercase}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:8px 12px;color:var(--text2);font-weight:600;border-bottom:1px solid var(--border);
+font-size:11px;text-transform:uppercase}
+td{padding:8px 12px;border-bottom:1px solid #21262d}tr:hover{background:#1c2333}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.badge-green{background:#1a3a1a;color:var(--green)}.badge-red{background:#3a1a1a;color:var(--red)}
+.badge-yellow{background:#3a2a1a;color:var(--yellow)}.badge-blue{background:#1a2a3a;color:var(--accent)}
+.badge-purple{background:#2a1a3a;color:var(--purple)}.badge-cyan{background:#1a2a2a;color:var(--cyan)}
+.phase-card{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;
+margin-bottom:10px;transition:border-color .2s}.phase-card:hover{border-color:var(--accent)}
+.phase-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.phase-header h3{font-size:14px;color:var(--text)}
+.phase-meta{display:flex;gap:16px;font-size:12px;color:var(--text2);flex-wrap:wrap}.phase-meta span strong{color:var(--text)}
+.progress-wrap{height:8px;background:#21262d;border-radius:4px;overflow:hidden;margin:6px 0}
+.progress-bar{height:100%;border-radius:4px;transition:width .5s ease}
+.progress-bar.cyan{background:var(--cyan)}.progress-bar.green{background:var(--green)}
+.progress-bar.yellow{background:var(--yellow)}.progress-bar.red{background:var(--red)}
+.monitor-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.node-live{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px}
+.node-live h4{font-size:13px;color:var(--cyan);margin-bottom:8px}
+.node-live .rate{font-size:22px;font-weight:700;color:var(--accent)}
+.node-live .rate small{font-size:12px;color:var(--text2)}
+.tick-log{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px;
+max-height:250px;overflow-y:auto;font-family:'Courier New',monospace;font-size:12px;color:var(--text2)}
+.tick-line{padding:2px 0;border-bottom:1px solid #21262d}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;width:480px;max-height:80vh;overflow-y:auto}
+.modal h2{font-size:16px;color:var(--cyan);margin-bottom:16px}
+.modal label{display:flex;align-items:center;gap:8px;padding:8px 0;font-size:13px;cursor:pointer}
+.modal input[type=checkbox]{accent-color:var(--cyan)}
+.modal-btns{display:flex;gap:8px;margin-top:16px}
+.modal-btns button{padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-size:13px}
+.btn-run{background:var(--green);color:#fff}.btn-cancel{background:var(--border);color:var(--text)}
+.toast-container{position:fixed;top:60px;right:20px;z-index:300;display:flex;flex-direction:column;gap:8px}
+.toast{padding:10px 16px;border-radius:8px;font-size:13px;color:#fff;animation:slideIn .3s ease;max-width:350px}
+.toast.success{background:#238636}.toast.error{background:#da3633}.toast.info{background:#1f6feb}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+.sb-sep{border-top:1px solid var(--border);margin:12px 0}
+</style></head><body>
+<div class="topbar"><div class="brand"><h1>&#9889; RESILIENCE ORCHESTRATOR</h1><span>v2.2</span></div>
+<div class="controls"><span id="statusBadge" class="status-badge status-idle">IDLE</span>
+<button class="kill-btn" id="killBtn" onclick="doAbort()">&#9888; KILL SWITCH</button></div></div>
+<div class="layout">
+<div class="sidebar">
+<h3>Setup</h3>
+<button class="sb-btn" onclick="loadCampaign()">&#128196; Load Campaign</button>
+<button class="sb-btn" onclick="loadTargets()">&#127919; Load Targets</button>
+<button class="sb-btn" onclick="checkNodes()">&#128300; Check Nodes</button>
+<button class="sb-btn" onclick="validateCampaign()">&#9989; Validate</button>
+<div class="sb-sep"></div><h3>Execute</h3>
+<button class="sb-btn primary" onclick="runFullCampaign()">&#9654; Run Full Campaign</button>
+<button class="sb-btn" onclick="showPhaseModal()">&#127919; Run Selected Phases</button>
+<div class="sb-sep"></div><h3>Reports</h3>
+<button class="sb-btn" onclick="window.open('/api/report/json','_blank')">&#128196; JSON Report</button>
+<button class="sb-btn" onclick="window.open('/api/report/text','_blank')">&#128196; Text Report</button>
+<button class="sb-btn" onclick="switchTab('tab-audit')">&#128270; Audit Log</button>
+</div>
+<div class="main">
+<div class="tabs">
+<div class="tab active" onclick="switchTab('tab-dashboard')">Dashboard</div>
+<div class="tab" onclick="switchTab('tab-monitor')">Live Monitor</div>
+<div class="tab" onclick="switchTab('tab-results')">Results</div>
+<div class="tab" onclick="switchTab('tab-audit')">Audit Log</div></div>
+<div id="tab-dashboard" class="tab-content active">
+<div class="card" id="campaignCard"><h2>Campaign Summary</h2>
+<div id="campaignInfo" style="color:var(--text2);font-size:13px">No campaign loaded. Click <b>Load Campaign</b> to begin.</div></div>
+<div class="card"><h2>Node Fleet</h2>
+<table><thead><tr><th>Node ID</th><th>Host</th><th>Port</th><th>Role</th><th>Max Rate</th><th>Status</th></tr></thead>
+<tbody id="nodesBody"><tr><td colspan="6" style="color:var(--text2)">No nodes loaded</td></tr></tbody></table></div>
+<div class="card"><h2>Targets</h2>
+<table><thead><tr><th>#</th><th>Address</th><th>Type</th><th>Port</th><th>Status</th><th>Latency</th></tr></thead>
+<tbody id="targetsBody"><tr><td colspan="6" style="color:var(--text2)">No targets loaded</td></tr></tbody></table></div>
+<div class="card" id="phasesCard" style="display:none"><h2>Phases</h2><div id="phasesList"></div></div></div>
+<div id="tab-monitor" class="tab-content">
+<div class="card"><h2>Live Traffic Monitor</h2>
+<div class="card-grid" id="liveStats">
+<div class="stat"><div class="val" id="livePhase">-</div><div class="lbl">Current Phase</div></div>
+<div class="stat"><div class="val" id="liveElapsed">0s</div><div class="lbl">Elapsed</div></div>
+<div class="stat"><div class="val" id="liveTarget">0</div><div class="lbl">Target Mbps</div></div>
+<div class="stat"><div class="val" id="liveActual">0</div><div class="lbl">Actual Mbps</div></div></div>
+<div class="progress-wrap"><div class="progress-bar cyan" id="liveProgress" style="width:0%"></div></div>
+<div style="text-align:center;font-size:11px;color:var(--text2);margin-top:4px"><span id="liveRamp">-</span></div></div>
+<div class="monitor-grid" id="nodeMonitors"></div>
+<div class="card" style="margin-top:16px"><h2>Tick Log</h2>
+<div class="tick-log" id="tickLog">Waiting for campaign execution...</div></div></div>
+<div id="tab-results" class="tab-content">
+<div class="card"><h2>Campaign Results</h2>
+<div id="resultContent" style="color:var(--text2);font-size:13px">No results yet.</div></div>
+<div id="phaseResults"></div>
+<div class="card" id="enforcementCard" style="display:none"><h2>Enforcement Events</h2>
+<table><thead><tr><th>Time</th><th>Node</th><th>Phase</th><th>Measured</th><th>Limit</th><th>Action</th></tr></thead>
+<tbody id="enforcementBody"></tbody></table></div></div>
+<div id="tab-audit" class="tab-content"><div class="card"><h2>Audit Log</h2>
+<button class="sb-btn" onclick="loadAudit()" style="margin-bottom:12px;display:inline-block;width:auto">&#128260; Refresh</button>
+<table><thead><tr><th>Timestamp</th><th>Actor</th><th>Action</th><th>Detail</th><th>Phase</th></tr></thead>
+<tbody id="auditBody"><tr><td colspan="5" style="color:var(--text2)">Click refresh</td></tr></tbody></table></div></div>
+</div></div>
+<div class="modal-overlay" id="phaseModal"><div class="modal"><h2>Select Phases to Run</h2>
+<div id="phaseCheckboxes"></div><div class="modal-btns">
+<button class="btn-run" onclick="runSelectedPhases()">&#9654; Run Selected</button>
+<button class="btn-cancel" onclick="document.getElementById('phaseModal').classList.remove('show')">Cancel</button>
+</div></div></div>
+<div class="toast-container" id="toasts"></div>
+<script>
+let campaignData=null,eventSource=null,pollInterval=null;
+function toast(m,t='info'){const c=document.getElementById('toasts'),e=document.createElement('div');
+e.className='toast '+t;e.textContent=m;c.appendChild(e);setTimeout(()=>e.remove(),4000)}
+function api(u,o={}){return fetch(u,{headers:{'Content-Type':'application/json'},...o}).then(r=>r.json())}
+function badge(v,c){return`<span class="badge badge-${c}">${v}</span>`}
+function statusBadge(s){const m={online:'green',offline:'red',busy:'yellow',error:'red',live:'green',
+dead:'red',unknown:'yellow',done:'green',aborted:'red',active:'blue',ramping:'yellow',cooling:'cyan',
+pending:'yellow',skipped:'yellow'};return badge(s,m[s]||'blue')}
+function roleBadge(r){return r==='trex'?badge('TRex','purple'):badge('MHDDoS','orange')}
+function modeBadge(m){const c={tcp_flood:'red',syn_flood:'red',udp_flood:'yellow',http_flood:'blue',
+slowloris:'purple',dns_amp:'cyan'};return badge(m,c[m]||'blue')}
+function switchTab(id){document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+const labels={'tab-dashboard':'Dashboard','tab-monitor':'Live Monitor','tab-results':'Results','tab-audit':'Audit Log'};
+document.querySelectorAll('.tab').forEach(e=>{if(e.textContent===labels[id])e.classList.add('active')});
+if(id==='tab-audit')loadAudit()}
+function loadCampaign(){api('/api/campaign/load',{method:'POST',body:JSON.stringify({})}).then(d=>{
+if(!d.ok){toast(d.error,'error');return}campaignData=d.campaign;renderCampaign(d.campaign);toast('Campaign loaded','success')})}
+function renderCampaign(c){document.getElementById('campaignInfo').innerHTML=`
+<div class="card-grid"><div class="stat"><div class="val">${c.campaign_id}</div><div class="lbl">Campaign ID</div></div>
+<div class="stat"><div class="val">${c.phases.length}</div><div class="lbl">Phases</div></div>
+<div class="stat"><div class="val">${c.nodes.length}</div><div class="lbl">Nodes</div></div>
+<div class="stat"><div class="val">${c.global_max_rate_mbps.toLocaleString()}</div><div class="lbl">Global Max Mbps</div></div>
+<div class="stat"><div class="val">${c.abort_threshold_mbps.toLocaleString()}</div><div class="lbl">Abort Threshold</div></div></div>
+<p style="margin-top:12px;font-size:13px"><b>${c.name}</b> &mdash; ${c.description}</p>`;
+document.getElementById('nodesBody').innerHTML=c.nodes.map(n=>
+`<tr><td><b>${n.node_id}</b></td><td>${n.host}</td><td>${n.port}</td><td>${roleBadge(n.role)}</td>
+<td>${n.max_rate_mbps} Mbps</td><td>${statusBadge(n.status)}</td></tr>`).join('');
+document.getElementById('phasesCard').style.display='block';
+document.getElementById('phasesList').innerHTML=c.phases.map(p=>`
+<div class="phase-card"><div class="phase-header"><h3>${p.phase_id}: ${p.name}</h3>${modeBadge(p.attack_mode)}</div>
+<div class="phase-meta"><span><strong>${p.rate}</strong> (${p.rate_mbps.toFixed(0)} Mbps)</span>
+<span><strong>${p.duration_seconds}s</strong></span><span>Ramp: ${p.ramp_up_seconds}s/${p.ramp_down_seconds}s</span>
+<span>Nodes: ${p.node_ids.join(', ')}</span></div></div>`).join('')}
+function loadTargets(){api('/api/targets/load',{method:'POST',body:JSON.stringify({})}).then(d=>{
+if(!d.ok){toast(d.error,'error');return}
+document.getElementById('targetsBody').innerHTML=d.targets.map((t,i)=>
+`<tr><td>${i+1}</td><td><b>${t.address}</b></td><td>${badge(t.asset_type,'blue')}</td>
+<td>${t.port}</td><td>${statusBadge(t.status)}</td><td>${t.latency_ms>0?t.latency_ms.toFixed(1)+' ms':'-'}</td></tr>`).join('');
+toast(d.count+' targets loaded','success')})}
+function checkNodes(){api('/api/nodes/health',{method:'POST'}).then(d=>{
+if(!d.ok){toast(d.error,'error');return}
+document.getElementById('nodesBody').innerHTML=d.nodes.map(n=>
+`<tr><td><b>${n.node_id}</b></td><td>${n.host}</td><td>${n.port}</td><td>${roleBadge(n.role)}</td>
+<td>${n.max_rate_mbps} Mbps</td><td>${statusBadge(n.status)}</td></tr>`).join('');
+toast('Health check complete','success')})}
+function validateCampaign(){api('/api/campaign/validate',{method:'POST'}).then(d=>{
+if(!d.ok){toast(d.error,'error');return}
+if(d.valid)toast('Campaign is valid','success');else d.warnings.forEach(w=>toast(w,'error'))})}
+function runFullCampaign(){if(!campaignData){toast('Load a campaign first','error');return}startCampaign(null)}
+function startCampaign(phases){const body=phases?{phases}:{};
+api('/api/campaign/run',{method:'POST',body:JSON.stringify(body)}).then(d=>{
+if(!d.ok){toast(d.error,'error');return}toast('Campaign started','success');
+switchTab('tab-monitor');setRunningState(true);startSSE();startPolling()})}
+function showPhaseModal(){if(!campaignData){toast('Load a campaign first','error');return}
+document.getElementById('phaseCheckboxes').innerHTML=campaignData.phases.map(p=>
+`<label><input type="checkbox" value="${p.phase_id}" checked><b>${p.phase_id}</b>: ${p.name} (${p.attack_mode})</label>`).join('');
+document.getElementById('phaseModal').classList.add('show')}
+function runSelectedPhases(){const checked=[...document.querySelectorAll('#phaseCheckboxes input:checked')].map(e=>e.value);
+if(!checked.length){toast('Select at least one phase','error');return}
+document.getElementById('phaseModal').classList.remove('show');startCampaign(checked)}
+function doAbort(){if(!confirm('EMERGENCY ABORT: Stop all traffic immediately?'))return;
+api('/api/campaign/abort',{method:'POST'}).then(()=>toast('ABORT signal sent','error'))}
+function startSSE(){if(eventSource)eventSource.close();
+document.getElementById('tickLog').innerHTML='';document.getElementById('nodeMonitors').innerHTML='';
+eventSource=new EventSource('/api/stream');
+eventSource.onmessage=function(e){updateMonitor(JSON.parse(e.data))};
+eventSource.addEventListener('done',function(e){const r=JSON.parse(e.data);setRunningState(false);
+renderResults(r);switchTab('tab-results');toast('Campaign completed','success');eventSource.close();eventSource=null});
+eventSource.onerror=function(){setTimeout(()=>{setRunningState(false);loadStatus()},1000);
+if(eventSource)eventSource.close();eventSource=null}}
+function startPolling(){if(pollInterval)clearInterval(pollInterval);
+pollInterval=setInterval(()=>{api('/api/campaign/status').then(d=>{
+if(!d.running&&d.result){clearInterval(pollInterval);pollInterval=null;setRunningState(false);renderResults(d.result)}})},2000)}
+function loadStatus(){api('/api/campaign/status').then(d=>{if(d.result)renderResults(d.result)})}
+function updateMonitor(t){document.getElementById('livePhase').textContent=t.phase_id;
+document.getElementById('liveElapsed').textContent=t.elapsed.toFixed(0)+'s';
+document.getElementById('liveTarget').textContent=t.target_mbps.toFixed(0);
+document.getElementById('liveActual').textContent=t.actual_mbps.toFixed(0);
+const pct=t.target_mbps>0?Math.min(100,(t.actual_mbps/t.target_mbps)*100):0;
+const bar=document.getElementById('liveProgress');bar.style.width=pct+'%';
+bar.className='progress-bar '+({ramp_up:'yellow',steady:'green',ramp_down:'cyan'}[t.ramp_phase]||'cyan');
+document.getElementById('liveRamp').textContent=t.ramp_phase.toUpperCase()+' | '+t.status.toUpperCase();
+if(t.node_tx){let h='';for(const[nid,tx]of Object.entries(t.node_tx)){const nCnt=Object.keys(t.node_tx).length;
+h+=`<div class="node-live"><h4>${nid}</h4><div class="rate">${tx.toFixed(1)} <small>Mbps</small></div>
+<div class="progress-wrap"><div class="progress-bar green" style="width:${Math.min(100,(tx/(t.target_mbps/nCnt))*100)}%"></div></div></div>`}
+document.getElementById('nodeMonitors').innerHTML=h}
+const log=document.getElementById('tickLog'),line=document.createElement('div');line.className='tick-line';
+line.textContent=`[${t.elapsed.toFixed(0)}s] ${t.phase_id} | ${t.actual_mbps.toFixed(1)}/${t.target_mbps.toFixed(1)} Mbps | ${t.ramp_phase}`;
+log.appendChild(line);log.scrollTop=log.scrollHeight}
+function renderResults(r){document.getElementById('resultContent').innerHTML=`
+<div class="card-grid"><div class="stat"><div class="val">${r.campaign_id||'-'}</div><div class="lbl">Campaign</div></div>
+<div class="stat"><div class="val">${(r.phase_results||[]).length}</div><div class="lbl">Phases Run</div></div>
+<div class="stat"><div class="val">${r.total_enforcement_events||0}</div><div class="lbl">Enforcements</div></div>
+<div class="stat"><div class="val">${r.aborted?badge('YES','red'):badge('NO','green')}</div><div class="lbl">Aborted</div></div></div>`;
+document.getElementById('phaseResults').innerHTML=(r.phase_results||[]).map(p=>`
+<div class="phase-card"><div class="phase-header"><h3>${p.phase_id}${p.name?': '+p.name:''}</h3>${statusBadge(p.status)}</div>
+<div class="phase-meta">${p.duration_actual_s?`<span>Duration: <strong>${p.duration_actual_s.toFixed(1)}s</strong></span>`:''}
+${p.peak_tx_mbps?`<span>Peak: <strong>${p.peak_tx_mbps.toFixed(1)} Mbps</strong></span>`:''}
+${p.avg_tx_mbps?`<span>Avg: <strong>${p.avg_tx_mbps.toFixed(1)} Mbps</strong></span>`:''}
+${p.enforcement_events?`<span>Enforcements: <strong>${p.enforcement_events}</strong></span>`:''}</div></div>`).join('');
+api('/api/enforcement').then(d=>{if(d.events&&d.events.length>0){
+document.getElementById('enforcementCard').style.display='block';
+document.getElementById('enforcementBody').innerHTML=d.events.map(e=>
+`<tr><td style="font-size:11px">${e.timestamp}</td><td>${e.node_id}</td><td>${e.phase_id}</td>
+<td>${e.measured_mbps} Mbps</td><td>${e.limit_mbps} Mbps</td><td>${statusBadge(e.action)}</td></tr>`).join('')}})}
+function setRunningState(running){const b=document.getElementById('statusBadge'),k=document.getElementById('killBtn');
+if(running){b.className='status-badge status-running';b.textContent='RUNNING';k.classList.add('pulsing')}
+else{b.className='status-badge status-done';b.textContent='COMPLETE';k.classList.remove('pulsing')}}
+function loadAudit(){api('/api/audit').then(d=>{const tb=document.getElementById('auditBody');
+if(!d.entries||!d.entries.length){tb.innerHTML='<tr><td colspan="5" style="color:var(--text2)">No entries</td></tr>';return}
+tb.innerHTML=d.entries.map(e=>`<tr><td style="font-size:11px">${e.timestamp}</td><td>${e.actor}</td>
+<td>${e.action}</td><td>${e.detail}</td><td>${e.phase_id||'-'}</td></tr>`).join('')})}
+window.addEventListener('load',()=>{loadCampaign();setTimeout(loadTargets,500)});
+</script></body></html>
