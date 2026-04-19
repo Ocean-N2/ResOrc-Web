@@ -9,8 +9,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d1117;color:#c9d1d
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#30363d;border-radius:3px}
 :root{--bg:#0d1117;--card:#161b22;--card2:#1c2333;--border:#30363d;--text:#c9d1d9;--text2:#8b949e;
 --accent:#58a6ff;--cyan:#39d2c0;--green:#3fb950;--red:#f85149;--yellow:#d29922;--purple:#bc8cff;--orange:#f0883e}
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;background:#161b22;
-border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;background:#161b22;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
 .topbar .brand{display:flex;align-items:center;gap:12px}
 .topbar .brand h1{font-size:18px;font-weight:700;color:var(--cyan)}
 .topbar .brand span{font-size:12px;color:var(--text2);padding:2px 8px;background:#1c2333;border-radius:4px}
@@ -19,24 +18,22 @@ border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
 .status-idle{background:#1c2333;color:var(--text2)}
 .status-running{background:#1a3a1a;color:var(--green);animation:pulse 1.5s infinite}
 .status-done{background:#1a2a3a;color:var(--accent)}
-.kill-btn{padding:8px 20px;background:var(--red);color:#fff;border:none;border-radius:6px;
-font-size:14px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:1px;transition:all .2s}
-.kill-btn:hover{background:#da3633;transform:scale(1.05)}.kill-btn:active{transform:scale(0.95)}
-.kill-btn.pulsing{animation:killpulse 0.8s infinite}
+.kill-btn{padding:8px 20px;background:var(--red);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:1px;transition:all .2s}
+.kill-btn:hover{background:#da3633;transform:scale(1.05)}.kill-btn.pulsing{animation:killpulse 0.8s infinite}
 @keyframes killpulse{0%,100%{box-shadow:0 0 0 0 rgba(248,81,73,.6)}50%{box-shadow:0 0 0 12px rgba(248,81,73,0)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 .layout{display:flex;min-height:calc(100vh - 53px)}
-.sidebar{width:220px;background:#161b22;border-right:1px solid var(--border);padding:16px 12px;flex-shrink:0}
+.sidebar{width:220px;background:#161b22;border-right:1px solid var(--border);padding:16px 12px;flex-shrink:0;overflow-y:auto}
 .main{flex:1;padding:20px 24px;overflow-y:auto}
 .sidebar h3{font-size:11px;text-transform:uppercase;color:var(--text2);margin:16px 0 8px;letter-spacing:1px}
 .sidebar h3:first-child{margin-top:0}
-.sb-btn{display:block;width:100%;padding:8px 12px;margin-bottom:4px;background:transparent;
-border:1px solid transparent;border-radius:6px;color:var(--text);font-size:13px;text-align:left;cursor:pointer;transition:all .15s}
+.sb-btn{display:block;width:100%;padding:8px 12px;margin-bottom:4px;background:transparent;border:1px solid transparent;border-radius:6px;color:var(--text);font-size:13px;text-align:left;cursor:pointer;transition:all .15s}
 .sb-btn:hover{background:#1c2333;border-color:var(--border)}
 .sb-btn.primary{background:#1a3a1a;border-color:#238636;color:var(--green)}
 .sb-btn.primary:hover{background:#238636;color:#fff}
-.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px}
-.tab{padding:10px 20px;font-size:13px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s}
+.sb-sep{border-top:1px solid var(--border);margin:12px 0}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px;flex-wrap:wrap}
+.tab{padding:10px 20px;font-size:13px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
 .tab:hover{color:var(--text)}.tab.active{color:var(--cyan);border-bottom-color:var(--cyan)}
 .tab-content{display:none}.tab-content.active{display:block}
 .card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin-bottom:16px}
@@ -45,15 +42,15 @@ border:1px solid transparent;border-radius:6px;color:var(--text);font-size:13px;
 .stat{text-align:center;padding:12px}.stat .val{font-size:24px;font-weight:700;color:var(--accent)}
 .stat .lbl{font-size:11px;color:var(--text2);margin-top:4px;text-transform:uppercase}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:8px 12px;color:var(--text2);font-weight:600;border-bottom:1px solid var(--border);
-font-size:11px;text-transform:uppercase}
+th{text-align:left;padding:8px 12px;color:var(--text2);font-weight:600;border-bottom:1px solid var(--border);font-size:11px;text-transform:uppercase}
 td{padding:8px 12px;border-bottom:1px solid #21262d}tr:hover{background:#1c2333}
 .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
 .badge-green{background:#1a3a1a;color:var(--green)}.badge-red{background:#3a1a1a;color:var(--red)}
 .badge-yellow{background:#3a2a1a;color:var(--yellow)}.badge-blue{background:#1a2a3a;color:var(--accent)}
 .badge-purple{background:#2a1a3a;color:var(--purple)}.badge-cyan{background:#1a2a2a;color:var(--cyan)}
-.phase-card{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;
-margin-bottom:10px;transition:border-color .2s}.phase-card:hover{border-color:var(--accent)}
+.badge-orange{background:#2a1a0a;color:var(--orange)}
+.phase-card{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:10px;transition:border-color .2s}
+.phase-card:hover{border-color:var(--accent)}
 .phase-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .phase-header h3{font-size:14px;color:var(--text)}
 .phase-meta{display:flex;gap:16px;font-size:12px;color:var(--text2);flex-wrap:wrap}.phase-meta span strong{color:var(--text)}
@@ -64,30 +61,53 @@ margin-bottom:10px;transition:border-color .2s}.phase-card:hover{border-color:va
 .monitor-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .node-live{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px}
 .node-live h4{font-size:13px;color:var(--cyan);margin-bottom:8px}
-.node-live .rate{font-size:22px;font-weight:700;color:var(--accent)}
-.node-live .rate small{font-size:12px;color:var(--text2)}
-.tick-log{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px;
-max-height:250px;overflow-y:auto;font-family:'Courier New',monospace;font-size:12px;color:var(--text2)}
+.node-live .rate{font-size:22px;font-weight:700;color:var(--accent)}.node-live .rate small{font-size:12px;color:var(--text2)}
+.tick-log{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px;max-height:250px;overflow-y:auto;font-family:'Courier New',monospace;font-size:12px;color:var(--text2)}
 .tick-line{padding:2px 0;border-bottom:1px solid #21262d}
-.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;
-background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center}
 .modal-overlay.show{display:flex}
-.modal{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;width:480px;max-height:80vh;overflow-y:auto}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;width:560px;max-height:85vh;overflow-y:auto}
 .modal h2{font-size:16px;color:var(--cyan);margin-bottom:16px}
-.modal label{display:flex;align-items:center;gap:8px;padding:8px 0;font-size:13px;cursor:pointer}
+.modal label{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;cursor:pointer}
 .modal input[type=checkbox]{accent-color:var(--cyan)}
 .modal-btns{display:flex;gap:8px;margin-top:16px}
 .modal-btns button{padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-size:13px}
 .btn-run{background:var(--green);color:#fff}.btn-cancel{background:var(--border);color:var(--text)}
+.btn-danger{background:var(--red);color:#fff}
 .toast-container{position:fixed;top:60px;right:20px;z-index:300;display:flex;flex-direction:column;gap:8px}
 .toast{padding:10px 16px;border-radius:8px;font-size:13px;color:#fff;animation:slideIn .3s ease;max-width:350px}
 .toast.success{background:#238636}.toast.error{background:#da3633}.toast.info{background:#1f6feb}
 @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
-.sb-sep{border-top:1px solid var(--border);margin:12px 0}
+/* ── Form styles ── */
+.form-group{margin-bottom:12px}
+.form-group label{display:block;font-size:12px;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:8px 12px;background:#0d1117;border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;font-family:inherit}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--cyan)}
+.form-group textarea{resize:vertical;min-height:60px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.btn-sm{padding:4px 10px;border:none;border-radius:4px;cursor:pointer;font-size:11px;font-weight:600}
+.btn-edit{background:#1a2a3a;color:var(--accent)}.btn-edit:hover{background:var(--accent);color:#fff}
+.btn-del{background:#3a1a1a;color:var(--red)}.btn-del:hover{background:var(--red);color:#fff}
+.btn-add{background:#1a3a1a;color:var(--green)}.btn-add:hover{background:var(--green);color:#fff}
+.btn-save{background:#1a2a4a;color:var(--cyan)}.btn-save:hover{background:var(--cyan);color:#0d1117}
+.btn-move{background:#1c2333;color:var(--text2);padding:2px 6px;font-size:10px}.btn-move:hover{color:var(--text)}
+.editor-section{border:1px solid var(--border);border-radius:8px;margin-bottom:16px;overflow:hidden}
+.editor-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--card2);cursor:pointer;user-select:none}
+.editor-header h2{font-size:14px;color:var(--cyan);margin:0}
+.editor-header .toggle{color:var(--text2);font-size:12px}
+.editor-body{padding:16px;background:var(--card);display:none}
+.editor-body.open{display:block}
+.inline-form{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:16px;margin-top:12px}
+.node-check{display:inline-flex;align-items:center;gap:4px;margin-right:12px;font-size:12px}
+.node-check input{accent-color:var(--cyan)}
+.actions-cell{white-space:nowrap;display:flex;gap:4px}
 </style></head><body>
+
 <div class="topbar"><div class="brand"><h1>&#9889; RESILIENCE ORCHESTRATOR</h1><span>v2.2</span></div>
 <div class="controls"><span id="statusBadge" class="status-badge status-idle">IDLE</span>
 <button class="kill-btn" id="killBtn" onclick="doAbort()">&#9888; KILL SWITCH</button></div></div>
+
 <div class="layout">
 <div class="sidebar">
 <h3>Setup</h3>
@@ -95,6 +115,10 @@ background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center}
 <button class="sb-btn" onclick="loadTargets()">&#127919; Load Targets</button>
 <button class="sb-btn" onclick="checkNodes()">&#128300; Check Nodes</button>
 <button class="sb-btn" onclick="validateCampaign()">&#9989; Validate</button>
+<div class="sb-sep"></div><h3>Configure</h3>
+<button class="sb-btn" onclick="switchTab('tab-config')" style="color:var(--orange)">&#9881; Edit Configuration</button>
+<button class="sb-btn" onclick="saveCampaign()">&#128190; Save Campaign</button>
+<button class="sb-btn" onclick="window.open('/api/campaign/export','_blank')">&#128228; Export YAML</button>
 <div class="sb-sep"></div><h3>Execute</h3>
 <button class="sb-btn primary" onclick="runFullCampaign()">&#9654; Run Full Campaign</button>
 <button class="sb-btn" onclick="showPhaseModal()">&#127919; Run Selected Phases</button>
@@ -106,71 +130,183 @@ background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center}
 <div class="main">
 <div class="tabs">
 <div class="tab active" onclick="switchTab('tab-dashboard')">Dashboard</div>
+<div class="tab" onclick="switchTab('tab-config')">Configuration</div>
 <div class="tab" onclick="switchTab('tab-monitor')">Live Monitor</div>
 <div class="tab" onclick="switchTab('tab-results')">Results</div>
-<div class="tab" onclick="switchTab('tab-audit')">Audit Log</div></div>
+<div class="tab" onclick="switchTab('tab-audit')">Audit Log</div>
+</div>
+
+<!-- TAB: Dashboard -->
 <div id="tab-dashboard" class="tab-content active">
-<div class="card" id="campaignCard"><h2>Campaign Summary</h2>
-<div id="campaignInfo" style="color:var(--text2);font-size:13px">No campaign loaded. Click <b>Load Campaign</b> to begin.</div></div>
-<div class="card"><h2>Node Fleet</h2>
-<table><thead><tr><th>Node ID</th><th>Host</th><th>Port</th><th>Role</th><th>Max Rate</th><th>Status</th></tr></thead>
-<tbody id="nodesBody"><tr><td colspan="6" style="color:var(--text2)">No nodes loaded</td></tr></tbody></table></div>
-<div class="card"><h2>Targets</h2>
-<table><thead><tr><th>#</th><th>Address</th><th>Type</th><th>Port</th><th>Status</th><th>Latency</th></tr></thead>
-<tbody id="targetsBody"><tr><td colspan="6" style="color:var(--text2)">No targets loaded</td></tr></tbody></table></div>
-<div class="card" id="phasesCard" style="display:none"><h2>Phases</h2><div id="phasesList"></div></div></div>
+<div class="card"><h2>Campaign Summary</h2><div id="campaignInfo" style="color:var(--text2);font-size:13px">No campaign loaded. Click <b>Load Campaign</b>.</div></div>
+<div class="card"><h2>Node Fleet</h2><table><thead><tr><th>Node ID</th><th>Host</th><th>Port</th><th>Role</th><th>Max Rate</th><th>Status</th></tr></thead><tbody id="nodesBody"><tr><td colspan="6" style="color:var(--text2)">No nodes</td></tr></tbody></table></div>
+<div class="card"><h2>Targets</h2><table><thead><tr><th>#</th><th>Address</th><th>Type</th><th>Port</th><th>Status</th><th>Latency</th></tr></thead><tbody id="targetsBody"><tr><td colspan="6" style="color:var(--text2)">No targets</td></tr></tbody></table></div>
+<div class="card" id="phasesCard" style="display:none"><h2>Phases</h2><div id="phasesList"></div></div>
+</div>
+
+<!-- TAB: Configuration Editor -->
+<div id="tab-config" class="tab-content">
+
+<!-- Campaign Settings -->
+<div class="editor-section"><div class="editor-header" onclick="toggleEditor(this)"><h2>&#9881; Campaign Settings</h2><span class="toggle">&#9660;</span></div>
+<div class="editor-body open" id="edCampaign">
+<div class="form-row"><div class="form-group"><label>Campaign ID</label><input id="cfgId" placeholder="CAMP-2026-..."></div>
+<div class="form-group"><label>Name</label><input id="cfgName" placeholder="Campaign name"></div></div>
+<div class="form-group"><label>Description</label><textarea id="cfgDesc" rows="2"></textarea></div>
+<div class="form-row"><div class="form-group"><label>Global Max Rate (Mbps)</label><input id="cfgMaxRate" type="number"></div>
+<div class="form-group"><label>Abort Threshold (Mbps)</label><input id="cfgAbort" type="number"></div></div>
+<div style="display:flex;gap:8px;margin-top:8px">
+<button class="btn-sm btn-save" onclick="updateCampaignSettings()">&#128190; Save Settings</button>
+<button class="btn-sm btn-edit" onclick="window.open('/api/campaign/export','_blank')">&#128228; Export YAML</button></div>
+</div></div>
+
+<!-- Nodes Editor -->
+<div class="editor-section"><div class="editor-header" onclick="toggleEditor(this)"><h2>&#128421; Nodes Editor</h2><span class="toggle">&#9660;</span></div>
+<div class="editor-body open" id="edNodes">
+<table><thead><tr><th>Node ID</th><th>Host</th><th>Port</th><th>Role</th><th>Max Rate</th><th>Auth Token</th><th>Actions</th></tr></thead>
+<tbody id="edNodesBody"></tbody></table>
+<button class="btn-sm btn-add" style="margin-top:12px" onclick="showAddNodeForm()">+ Add Node</button>
+<div id="addNodeForm" style="display:none" class="inline-form">
+<div class="form-row3"><div class="form-group"><label>Node ID</label><input id="anId" placeholder="trex-03"></div>
+<div class="form-group"><label>Host</label><input id="anHost" placeholder="10.20.0.13"></div>
+<div class="form-group"><label>Port</label><input id="anPort" type="number" value="4501"></div></div>
+<div class="form-row3"><div class="form-group"><label>Role</label><select id="anRole"><option value="trex">TRex</option><option value="mhddos">MHDDoS</option></select></div>
+<div class="form-group"><label>Max Rate (Mbps)</label><input id="anRate" type="number" value="1000"></div>
+<div class="form-group"><label>Auth Token</label><input id="anToken" placeholder="secret-token"></div></div>
+<div style="display:flex;gap:8px;margin-top:8px"><button class="btn-sm btn-add" onclick="addNode()">Add Node</button>
+<button class="btn-sm btn-cancel" onclick="hideAddNodeForm()">Cancel</button></div>
+</div></div></div>
+
+<!-- Targets Editor -->
+<div class="editor-section"><div class="editor-header" onclick="toggleEditor(this)"><h2>&#127919; Targets Editor</h2><span class="toggle">&#9660;</span></div>
+<div class="editor-body open" id="edTargets">
+<table><thead><tr><th>#</th><th>Address</th><th>Type</th><th>Port</th><th>Actions</th></tr></thead>
+<tbody id="edTargetsBody"></tbody></table>
+<div style="display:flex;gap:8px;margin-top:12px;align-items:flex-end">
+<div class="form-group" style="flex:1;margin-bottom:0"><label>Add Target(s)</label>
+<input id="addTargetInput" placeholder="192.168.1.100 or https://example.com"></div>
+<button class="btn-sm btn-add" onclick="addTarget()">Add</button>
+<button class="btn-sm btn-edit" onclick="loadTargets()">Load RTF</button>
+<button class="btn-sm btn-del" onclick="clearTargets()">Clear All</button></div>
+<div class="form-group" style="margin-top:12px"><label>Bulk Add (one per line)</label>
+<textarea id="bulkTargets" rows="3" placeholder="192.168.1.100&#10;https://api.example.com&#10;10.0.0.50:443"></textarea></div>
+<button class="btn-sm btn-add" onclick="bulkAddTargets()">Bulk Add</button>
+</div></div>
+
+<!-- Phases Editor -->
+<div class="editor-section"><div class="editor-header" onclick="toggleEditor(this)"><h2>&#9889; Phases Editor</h2><span class="toggle">&#9660;</span></div>
+<div class="editor-body open" id="edPhases">
+<div id="edPhasesList"></div>
+<button class="btn-sm btn-add" style="margin-top:12px" onclick="showAddPhaseForm()">+ Add Phase</button>
+<div id="addPhaseForm" style="display:none" class="inline-form">
+<div class="form-row"><div class="form-group"><label>Phase ID</label><input id="apId" placeholder="phase-6"></div>
+<div class="form-group"><label>Name</label><input id="apName" placeholder="New Phase"></div></div>
+<div class="form-row3"><div class="form-group"><label>Attack Mode</label><select id="apMode">
+<option value="tcp_flood">TCP Flood</option><option value="syn_flood">SYN Flood</option><option value="udp_flood">UDP Flood</option>
+<option value="http_flood">HTTP Flood</option><option value="slowloris">Slowloris</option><option value="dns_amp">DNS Amp</option></select></div>
+<div class="form-group"><label>Rate</label><input id="apRate" placeholder="800Mbps"></div>
+<div class="form-group"><label>Duration (seconds)</label><input id="apDuration" type="number" value="120"></div></div>
+<div class="form-row"><div class="form-group"><label>Ramp Up (s)</label><input id="apRampUp" type="number" value="30"></div>
+<div class="form-group"><label>Ramp Down (s)</label><input id="apRampDown" type="number" value="10"></div></div>
+<div class="form-group"><label>Targets (comma-separated)</label><input id="apTargets" placeholder="192.168.1.100, 10.0.0.50:443"></div>
+<div class="form-group"><label>Assigned Nodes</label><div id="apNodes"></div></div>
+<div style="display:flex;gap:8px;margin-top:8px"><button class="btn-sm btn-add" onclick="addPhase()">Add Phase</button>
+<button class="btn-sm btn-cancel" onclick="hideAddPhaseForm()">Cancel</button></div>
+</div></div></div>
+</div>
+
+<!-- TAB: Live Monitor -->
 <div id="tab-monitor" class="tab-content">
 <div class="card"><h2>Live Traffic Monitor</h2>
-<div class="card-grid" id="liveStats">
-<div class="stat"><div class="val" id="livePhase">-</div><div class="lbl">Current Phase</div></div>
+<div class="card-grid"><div class="stat"><div class="val" id="livePhase">-</div><div class="lbl">Current Phase</div></div>
 <div class="stat"><div class="val" id="liveElapsed">0s</div><div class="lbl">Elapsed</div></div>
 <div class="stat"><div class="val" id="liveTarget">0</div><div class="lbl">Target Mbps</div></div>
 <div class="stat"><div class="val" id="liveActual">0</div><div class="lbl">Actual Mbps</div></div></div>
 <div class="progress-wrap"><div class="progress-bar cyan" id="liveProgress" style="width:0%"></div></div>
 <div style="text-align:center;font-size:11px;color:var(--text2);margin-top:4px"><span id="liveRamp">-</span></div></div>
 <div class="monitor-grid" id="nodeMonitors"></div>
-<div class="card" style="margin-top:16px"><h2>Tick Log</h2>
-<div class="tick-log" id="tickLog">Waiting for campaign execution...</div></div></div>
+<div class="card" style="margin-top:16px"><h2>Tick Log</h2><div class="tick-log" id="tickLog">Waiting...</div></div></div>
+
+<!-- TAB: Results -->
 <div id="tab-results" class="tab-content">
-<div class="card"><h2>Campaign Results</h2>
-<div id="resultContent" style="color:var(--text2);font-size:13px">No results yet.</div></div>
+<div class="card"><h2>Campaign Results</h2><div id="resultContent" style="color:var(--text2);font-size:13px">No results yet.</div></div>
 <div id="phaseResults"></div>
 <div class="card" id="enforcementCard" style="display:none"><h2>Enforcement Events</h2>
 <table><thead><tr><th>Time</th><th>Node</th><th>Phase</th><th>Measured</th><th>Limit</th><th>Action</th></tr></thead>
 <tbody id="enforcementBody"></tbody></table></div></div>
+
+<!-- TAB: Audit -->
 <div id="tab-audit" class="tab-content"><div class="card"><h2>Audit Log</h2>
 <button class="sb-btn" onclick="loadAudit()" style="margin-bottom:12px;display:inline-block;width:auto">&#128260; Refresh</button>
 <table><thead><tr><th>Timestamp</th><th>Actor</th><th>Action</th><th>Detail</th><th>Phase</th></tr></thead>
 <tbody id="auditBody"><tr><td colspan="5" style="color:var(--text2)">Click refresh</td></tr></tbody></table></div></div>
+
 </div></div>
+
+<!-- Phase Selector Modal -->
 <div class="modal-overlay" id="phaseModal"><div class="modal"><h2>Select Phases to Run</h2>
 <div id="phaseCheckboxes"></div><div class="modal-btns">
 <button class="btn-run" onclick="runSelectedPhases()">&#9654; Run Selected</button>
 <button class="btn-cancel" onclick="document.getElementById('phaseModal').classList.remove('show')">Cancel</button>
 </div></div></div>
+
+<!-- Edit Phase Modal -->
+<div class="modal-overlay" id="editPhaseModal"><div class="modal"><h2 id="epTitle">Edit Phase</h2>
+<div class="form-row"><div class="form-group"><label>Name</label><input id="epName"></div>
+<div class="form-group"><label>Attack Mode</label><select id="epMode">
+<option value="tcp_flood">TCP Flood</option><option value="syn_flood">SYN Flood</option><option value="udp_flood">UDP Flood</option>
+<option value="http_flood">HTTP Flood</option><option value="slowloris">Slowloris</option><option value="dns_amp">DNS Amp</option></select></div></div>
+<div class="form-row3"><div class="form-group"><label>Rate</label><input id="epRate"></div>
+<div class="form-group"><label>Duration (s)</label><input id="epDuration" type="number"></div>
+<div class="form-group"><label>Ramp Up / Down</label><div style="display:flex;gap:4px"><input id="epRampUp" type="number" style="width:50%"><input id="epRampDown" type="number" style="width:50%"></div></div></div>
+<div class="form-group"><label>Targets (comma-separated)</label><input id="epTargets"></div>
+<div class="form-group"><label>Assigned Nodes</label><div id="epNodes"></div></div>
+<input type="hidden" id="epId">
+<div class="modal-btns"><button class="btn-run" onclick="saveEditPhase()">Save</button>
+<button class="btn-cancel" onclick="document.getElementById('editPhaseModal').classList.remove('show')">Cancel</button></div>
+</div></div>
+
+<!-- Edit Node Modal -->
+<div class="modal-overlay" id="editNodeModal"><div class="modal"><h2>Edit Node</h2>
+<div class="form-row"><div class="form-group"><label>Host</label><input id="enHost"></div>
+<div class="form-group"><label>Port</label><input id="enPort" type="number"></div></div>
+<div class="form-row3"><div class="form-group"><label>Role</label><select id="enRole"><option value="trex">TRex</option><option value="mhddos">MHDDoS</option></select></div>
+<div class="form-group"><label>Max Rate (Mbps)</label><input id="enRate" type="number"></div>
+<div class="form-group"><label>Auth Token</label><input id="enToken"></div></div>
+<input type="hidden" id="enId">
+<div class="modal-btns"><button class="btn-run" onclick="saveEditNode()">Save</button>
+<button class="btn-cancel" onclick="document.getElementById('editNodeModal').classList.remove('show')">Cancel</button></div>
+</div></div>
+
 <div class="toast-container" id="toasts"></div>
+
 <script>
 let campaignData=null,eventSource=null,pollInterval=null;
-function toast(m,t='info'){const c=document.getElementById('toasts'),e=document.createElement('div');
-e.className='toast '+t;e.textContent=m;c.appendChild(e);setTimeout(()=>e.remove(),4000)}
+function toast(m,t='info'){const c=document.getElementById('toasts'),e=document.createElement('div');e.className='toast '+t;e.textContent=m;c.appendChild(e);setTimeout(()=>e.remove(),4000)}
 function api(u,o={}){return fetch(u,{headers:{'Content-Type':'application/json'},...o}).then(r=>r.json())}
 function badge(v,c){return`<span class="badge badge-${c}">${v}</span>`}
-function statusBadge(s){const m={online:'green',offline:'red',busy:'yellow',error:'red',live:'green',
-dead:'red',unknown:'yellow',done:'green',aborted:'red',active:'blue',ramping:'yellow',cooling:'cyan',
-pending:'yellow',skipped:'yellow'};return badge(s,m[s]||'blue')}
+function statusBadge(s){const m={online:'green',offline:'red',busy:'yellow',error:'red',live:'green',dead:'red',unknown:'yellow',done:'green',aborted:'red',active:'blue',ramping:'yellow',cooling:'cyan',pending:'yellow',skipped:'yellow',throttle:'yellow',abort:'red',global_throttle:'orange'};return badge(s,m[s]||'blue')}
 function roleBadge(r){return r==='trex'?badge('TRex','purple'):badge('MHDDoS','orange')}
-function modeBadge(m){const c={tcp_flood:'red',syn_flood:'red',udp_flood:'yellow',http_flood:'blue',
-slowloris:'purple',dns_amp:'cyan'};return badge(m,c[m]||'blue')}
+function modeBadge(m){const c={tcp_flood:'red',syn_flood:'red',udp_flood:'yellow',http_flood:'blue',slowloris:'purple',dns_amp:'cyan'};return badge(m,c[m]||'blue')}
+
+/* ── Tab switching ── */
 function switchTab(id){document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
 document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));
 document.getElementById(id).classList.add('active');
-const labels={'tab-dashboard':'Dashboard','tab-monitor':'Live Monitor','tab-results':'Results','tab-audit':'Audit Log'};
+const labels={'tab-dashboard':'Dashboard','tab-config':'Configuration','tab-monitor':'Live Monitor','tab-results':'Results','tab-audit':'Audit Log'};
 document.querySelectorAll('.tab').forEach(e=>{if(e.textContent===labels[id])e.classList.add('active')});
-if(id==='tab-audit')loadAudit()}
+if(id==='tab-audit')loadAudit();if(id==='tab-config')populateConfigTab()}
+
+function toggleEditor(el){const body=el.nextElementSibling;body.classList.toggle('open');
+el.querySelector('.toggle').textContent=body.classList.contains('open')?'\u25BC':'\u25B6'}
+
+/* ── Campaign load/render ── */
 function loadCampaign(){api('/api/campaign/load',{method:'POST',body:JSON.stringify({})}).then(d=>{
 if(!d.ok){toast(d.error,'error');return}campaignData=d.campaign;renderCampaign(d.campaign);toast('Campaign loaded','success')})}
-function renderCampaign(c){document.getElementById('campaignInfo').innerHTML=`
-<div class="card-grid"><div class="stat"><div class="val">${c.campaign_id}</div><div class="lbl">Campaign ID</div></div>
+
+function renderCampaign(c){
+document.getElementById('campaignInfo').innerHTML=`<div class="card-grid">
+<div class="stat"><div class="val">${c.campaign_id}</div><div class="lbl">Campaign ID</div></div>
 <div class="stat"><div class="val">${c.phases.length}</div><div class="lbl">Phases</div></div>
 <div class="stat"><div class="val">${c.nodes.length}</div><div class="lbl">Nodes</div></div>
 <div class="stat"><div class="val">${c.global_max_rate_mbps.toLocaleString()}</div><div class="lbl">Global Max Mbps</div></div>
@@ -185,26 +321,174 @@ document.getElementById('phasesList').innerHTML=c.phases.map(p=>`
 <div class="phase-meta"><span><strong>${p.rate}</strong> (${p.rate_mbps.toFixed(0)} Mbps)</span>
 <span><strong>${p.duration_seconds}s</strong></span><span>Ramp: ${p.ramp_up_seconds}s/${p.ramp_down_seconds}s</span>
 <span>Nodes: ${p.node_ids.join(', ')}</span></div></div>`).join('')}
-function loadTargets(){api('/api/targets/load',{method:'POST',body:JSON.stringify({})}).then(d=>{
-if(!d.ok){toast(d.error,'error');return}
+
+/* ── Config tab population ── */
+function populateConfigTab(){if(!campaignData)return;const c=campaignData;
+document.getElementById('cfgId').value=c.campaign_id||'';
+document.getElementById('cfgName').value=c.name||'';
+document.getElementById('cfgDesc').value=c.description||'';
+document.getElementById('cfgMaxRate').value=c.global_max_rate_mbps||2000;
+document.getElementById('cfgAbort').value=c.abort_threshold_mbps||2500;
+renderEditorNodes();renderEditorTargets();renderEditorPhases()}
+
+/* ── Campaign settings update ── */
+function updateCampaignSettings(){
+api('/api/campaign/update',{method:'PUT',body:JSON.stringify({
+campaign_id:document.getElementById('cfgId').value,name:document.getElementById('cfgName').value,
+description:document.getElementById('cfgDesc').value,
+global_max_rate_mbps:parseFloat(document.getElementById('cfgMaxRate').value),
+abort_threshold_mbps:parseFloat(document.getElementById('cfgAbort').value)
+})}).then(d=>{if(d.ok){campaignData=d.campaign;renderCampaign(d.campaign);toast('Settings updated','success')}else toast(d.error,'error')})}
+
+function saveCampaign(){api('/api/campaign/save',{method:'POST',body:JSON.stringify({})}).then(d=>{
+if(d.ok)toast('Campaign saved to YAML','success');else toast(d.error,'error')})}
+
+/* ── Nodes CRUD ── */
+function renderEditorNodes(){if(!campaignData)return;const tb=document.getElementById('edNodesBody');
+tb.innerHTML=campaignData.nodes.map(n=>`<tr>
+<td><b>${n.node_id}</b></td><td>${n.host}</td><td>${n.port}</td><td>${roleBadge(n.role)}</td>
+<td>${n.max_rate_mbps}</td><td style="font-size:11px;color:var(--text2)">${n.auth_token?'****'+n.auth_token.slice(-4):'none'}</td>
+<td class="actions-cell"><button class="btn-sm btn-edit" onclick="editNode('${n.node_id}')">Edit</button>
+<button class="btn-sm btn-del" onclick="deleteNode('${n.node_id}')">Del</button></td></tr>`).join('')}
+
+function showAddNodeForm(){document.getElementById('addNodeForm').style.display='block'}
+function hideAddNodeForm(){document.getElementById('addNodeForm').style.display='none'}
+
+function addNode(){
+api('/api/nodes/add',{method:'POST',body:JSON.stringify({
+node_id:document.getElementById('anId').value,host:document.getElementById('anHost').value,
+port:parseInt(document.getElementById('anPort').value),role:document.getElementById('anRole').value,
+max_rate_mbps:parseFloat(document.getElementById('anRate').value),
+auth_token:document.getElementById('anToken').value})}).then(d=>{
+if(d.ok){refreshCampaign();hideAddNodeForm();toast('Node added','success')}else toast(d.error,'error')})}
+
+function editNode(nid){const n=campaignData.nodes.find(x=>x.node_id===nid);if(!n)return;
+document.getElementById('enId').value=nid;document.getElementById('enHost').value=n.host;
+document.getElementById('enPort').value=n.port;document.getElementById('enRole').value=n.role;
+document.getElementById('enRate').value=n.max_rate_mbps;document.getElementById('enToken').value=n.auth_token||'';
+document.getElementById('editNodeModal').classList.add('show')}
+
+function saveEditNode(){const nid=document.getElementById('enId').value;
+api(`/api/nodes/${nid}`,{method:'PUT',body:JSON.stringify({
+host:document.getElementById('enHost').value,port:parseInt(document.getElementById('enPort').value),
+role:document.getElementById('enRole').value,max_rate_mbps:parseFloat(document.getElementById('enRate').value),
+auth_token:document.getElementById('enToken').value})}).then(d=>{
+if(d.ok){refreshCampaign();document.getElementById('editNodeModal').classList.remove('show');toast('Node updated','success')}else toast(d.error,'error')})}
+
+function deleteNode(nid){if(!confirm(`Delete node ${nid}?`))return;
+api(`/api/nodes/${nid}`,{method:'DELETE'}).then(d=>{if(d.ok){refreshCampaign();toast('Node deleted','success')}else toast(d.error,'error')})}
+
+/* ── Targets CRUD ── */
+function renderEditorTargets(){
+api('/api/targets').then(d=>{if(!d.ok)return;const tb=document.getElementById('edTargetsBody');
+tb.innerHTML=d.targets.map((t,i)=>`<tr><td>${i+1}</td><td><b>${t.address}</b></td><td>${badge(t.asset_type,'blue')}</td>
+<td>${t.port}</td><td><button class="btn-sm btn-del" onclick="deleteTarget(${i})">Del</button></td></tr>`).join('');
 document.getElementById('targetsBody').innerHTML=d.targets.map((t,i)=>
 `<tr><td>${i+1}</td><td><b>${t.address}</b></td><td>${badge(t.asset_type,'blue')}</td>
-<td>${t.port}</td><td>${statusBadge(t.status)}</td><td>${t.latency_ms>0?t.latency_ms.toFixed(1)+' ms':'-'}</td></tr>`).join('');
-toast(d.count+' targets loaded','success')})}
+<td>${t.port}</td><td>${statusBadge(t.status)}</td><td>${t.latency_ms>0?t.latency_ms.toFixed(1)+' ms':'-'}</td></tr>`).join('')||'<tr><td colspan="6" style="color:var(--text2)">No targets</td></tr>'})}
+
+function loadTargets(){api('/api/targets/load',{method:'POST',body:JSON.stringify({})}).then(d=>{
+if(!d.ok){toast(d.error,'error');return}renderEditorTargets();toast(d.count+' targets loaded','success')})}
+
+function addTarget(){const v=document.getElementById('addTargetInput').value.trim();if(!v)return;
+api('/api/targets/add',{method:'POST',body:JSON.stringify({address:v})}).then(d=>{
+if(d.ok){document.getElementById('addTargetInput').value='';renderEditorTargets();toast('Target added','success')}else toast(d.error,'error')})}
+
+function bulkAddTargets(){const v=document.getElementById('bulkTargets').value.trim();if(!v)return;
+const addrs=v.split('\n').map(s=>s.trim()).filter(s=>s);
+api('/api/targets/add',{method:'POST',body:JSON.stringify({addresses:addrs})}).then(d=>{
+if(d.ok){document.getElementById('bulkTargets').value='';renderEditorTargets();toast(d.count+' targets added','success')}else toast(d.error,'error')})}
+
+function deleteTarget(idx){api(`/api/targets/${idx}`,{method:'DELETE'}).then(d=>{
+if(d.ok){renderEditorTargets();toast('Target removed','success')}else toast(d.error,'error')})}
+
+function clearTargets(){if(!confirm('Clear ALL targets?'))return;
+api('/api/targets/clear',{method:'DELETE'}).then(d=>{if(d.ok){renderEditorTargets();toast('Targets cleared','success')}})}
+
+/* ── Phases CRUD ── */
+function renderEditorPhases(){if(!campaignData)return;
+const el=document.getElementById('edPhasesList');
+el.innerHTML=campaignData.phases.map((p,i)=>`
+<div class="phase-card"><div class="phase-header">
+<div style="display:flex;align-items:center;gap:8px">
+<button class="btn-sm btn-move" onclick="movePhase(${i},-1)" ${i===0?'disabled':''}>&#9650;</button>
+<button class="btn-sm btn-move" onclick="movePhase(${i},1)" ${i===campaignData.phases.length-1?'disabled':''}>&#9660;</button>
+<h3>${p.phase_id}: ${p.name}</h3></div>
+<div style="display:flex;gap:4px">${modeBadge(p.attack_mode)}
+<button class="btn-sm btn-edit" onclick="editPhase('${p.phase_id}')">Edit</button>
+<button class="btn-sm btn-del" onclick="deletePhase('${p.phase_id}')">Del</button></div></div>
+<div class="phase-meta"><span><strong>${p.rate}</strong> (${p.rate_mbps.toFixed(0)} Mbps)</span>
+<span><strong>${p.duration_seconds}s</strong></span><span>Ramp: ${p.ramp_up_seconds}s/${p.ramp_down_seconds}s</span>
+<span>Nodes: ${p.node_ids.join(', ')||'none'}</span><span>Targets: ${p.targets.length}</span></div></div>`).join('')}
+
+function showAddPhaseForm(){document.getElementById('addPhaseForm').style.display='block';renderNodeCheckboxes('apNodes')}
+function hideAddPhaseForm(){document.getElementById('addPhaseForm').style.display='none'}
+
+function renderNodeCheckboxes(containerId,selected=[]){if(!campaignData)return;
+document.getElementById(containerId).innerHTML=campaignData.nodes.map(n=>
+`<label class="node-check"><input type="checkbox" value="${n.node_id}" ${selected.includes(n.node_id)?'checked':''}>${n.node_id} (${n.role})</label>`).join('')}
+
+function getCheckedNodes(containerId){return[...document.querySelectorAll(`#${containerId} input:checked`)].map(e=>e.value)}
+
+function addPhase(){
+api('/api/campaign/phases/add',{method:'POST',body:JSON.stringify({
+phase_id:document.getElementById('apId').value,name:document.getElementById('apName').value,
+attack_mode:document.getElementById('apMode').value,rate:document.getElementById('apRate').value,
+duration_seconds:parseInt(document.getElementById('apDuration').value),
+ramp_up_seconds:parseInt(document.getElementById('apRampUp').value),
+ramp_down_seconds:parseInt(document.getElementById('apRampDown').value),
+targets:document.getElementById('apTargets').value.split(',').map(s=>s.trim()).filter(s=>s),
+node_ids:getCheckedNodes('apNodes')})}).then(d=>{
+if(d.ok){campaignData=d.campaign;renderCampaign(d.campaign);renderEditorPhases();hideAddPhaseForm();toast('Phase added','success')}else toast(d.error,'error')})}
+
+function editPhase(pid){const p=campaignData.phases.find(x=>x.phase_id===pid);if(!p)return;
+document.getElementById('epId').value=pid;
+document.getElementById('epTitle').textContent='Edit Phase: '+pid;
+document.getElementById('epName').value=p.name;document.getElementById('epMode').value=p.attack_mode;
+document.getElementById('epRate').value=p.rate;document.getElementById('epDuration').value=p.duration_seconds;
+document.getElementById('epRampUp').value=p.ramp_up_seconds;document.getElementById('epRampDown').value=p.ramp_down_seconds;
+document.getElementById('epTargets').value=p.targets.join(', ');
+renderNodeCheckboxes('epNodes',p.node_ids);
+document.getElementById('editPhaseModal').classList.add('show')}
+
+function saveEditPhase(){const pid=document.getElementById('epId').value;
+api(`/api/campaign/phases/${pid}`,{method:'PUT',body:JSON.stringify({
+name:document.getElementById('epName').value,attack_mode:document.getElementById('epMode').value,
+rate:document.getElementById('epRate').value,duration_seconds:parseInt(document.getElementById('epDuration').value),
+ramp_up_seconds:parseInt(document.getElementById('epRampUp').value),
+ramp_down_seconds:parseInt(document.getElementById('epRampDown').value),
+targets:document.getElementById('epTargets').value.split(',').map(s=>s.trim()).filter(s=>s),
+node_ids:getCheckedNodes('epNodes')})}).then(d=>{
+if(d.ok){campaignData=d.campaign;renderCampaign(d.campaign);renderEditorPhases();
+document.getElementById('editPhaseModal').classList.remove('show');toast('Phase updated','success')}else toast(d.error,'error')})}
+
+function deletePhase(pid){if(!confirm(`Delete phase ${pid}?`))return;
+api(`/api/campaign/phases/${pid}`,{method:'DELETE'}).then(d=>{
+if(d.ok){campaignData=d.campaign;renderCampaign(d.campaign);renderEditorPhases();toast('Phase deleted','success')}else toast(d.error,'error')})}
+
+function movePhase(idx,dir){const phases=campaignData.phases;const newIdx=idx+dir;
+if(newIdx<0||newIdx>=phases.length)return;
+const order=phases.map(p=>p.phase_id);[order[idx],order[newIdx]]=[order[newIdx],order[idx]];
+api('/api/campaign/phases/reorder',{method:'POST',body:JSON.stringify({order})}).then(d=>{
+if(d.ok){campaignData=d.campaign;renderCampaign(d.campaign);renderEditorPhases()}})}
+
+function refreshCampaign(){api('/api/campaign').then(d=>{if(d.ok){campaignData=d.campaign;renderCampaign(d.campaign);renderEditorNodes();renderEditorPhases()}})}
+
+/* ── Existing functionality ── */
 function checkNodes(){api('/api/nodes/health',{method:'POST'}).then(d=>{
 if(!d.ok){toast(d.error,'error');return}
 document.getElementById('nodesBody').innerHTML=d.nodes.map(n=>
 `<tr><td><b>${n.node_id}</b></td><td>${n.host}</td><td>${n.port}</td><td>${roleBadge(n.role)}</td>
-<td>${n.max_rate_mbps} Mbps</td><td>${statusBadge(n.status)}</td></tr>`).join('');
-toast('Health check complete','success')})}
+<td>${n.max_rate_mbps} Mbps</td><td>${statusBadge(n.status)}</td></tr>`).join('');toast('Health check complete','success')})}
+
 function validateCampaign(){api('/api/campaign/validate',{method:'POST'}).then(d=>{
-if(!d.ok){toast(d.error,'error');return}
-if(d.valid)toast('Campaign is valid','success');else d.warnings.forEach(w=>toast(w,'error'))})}
+if(!d.ok){toast(d.error,'error');return}if(d.valid)toast('Campaign is valid','success');else d.warnings.forEach(w=>toast(w,'error'))})}
+
 function runFullCampaign(){if(!campaignData){toast('Load a campaign first','error');return}startCampaign(null)}
 function startCampaign(phases){const body=phases?{phases}:{};
 api('/api/campaign/run',{method:'POST',body:JSON.stringify(body)}).then(d=>{
-if(!d.ok){toast(d.error,'error');return}toast('Campaign started','success');
-switchTab('tab-monitor');setRunningState(true);startSSE();startPolling()})}
+if(!d.ok){toast(d.error,'error');return}toast('Campaign started','success');switchTab('tab-monitor');setRunningState(true);startSSE();startPolling()})}
+
 function showPhaseModal(){if(!campaignData){toast('Load a campaign first','error');return}
 document.getElementById('phaseCheckboxes').innerHTML=campaignData.phases.map(p=>
 `<label><input type="checkbox" value="${p.phase_id}" checked><b>${p.phase_id}</b>: ${p.name} (${p.attack_mode})</label>`).join('');
@@ -212,20 +496,19 @@ document.getElementById('phaseModal').classList.add('show')}
 function runSelectedPhases(){const checked=[...document.querySelectorAll('#phaseCheckboxes input:checked')].map(e=>e.value);
 if(!checked.length){toast('Select at least one phase','error');return}
 document.getElementById('phaseModal').classList.remove('show');startCampaign(checked)}
-function doAbort(){if(!confirm('EMERGENCY ABORT: Stop all traffic immediately?'))return;
-api('/api/campaign/abort',{method:'POST'}).then(()=>toast('ABORT signal sent','error'))}
+
+function doAbort(){if(!confirm('EMERGENCY ABORT?'))return;api('/api/campaign/abort',{method:'POST'}).then(()=>toast('ABORT signal sent','error'))}
+
 function startSSE(){if(eventSource)eventSource.close();
 document.getElementById('tickLog').innerHTML='';document.getElementById('nodeMonitors').innerHTML='';
 eventSource=new EventSource('/api/stream');
 eventSource.onmessage=function(e){updateMonitor(JSON.parse(e.data))};
-eventSource.addEventListener('done',function(e){const r=JSON.parse(e.data);setRunningState(false);
-renderResults(r);switchTab('tab-results');toast('Campaign completed','success');eventSource.close();eventSource=null});
-eventSource.onerror=function(){setTimeout(()=>{setRunningState(false);loadStatus()},1000);
-if(eventSource)eventSource.close();eventSource=null}}
+eventSource.addEventListener('done',function(e){setRunningState(false);renderResults(JSON.parse(e.data));switchTab('tab-results');toast('Campaign completed','success');eventSource.close();eventSource=null});
+eventSource.onerror=function(){setTimeout(()=>{setRunningState(false);loadStatus()},1000);if(eventSource)eventSource.close();eventSource=null}}
 function startPolling(){if(pollInterval)clearInterval(pollInterval);
-pollInterval=setInterval(()=>{api('/api/campaign/status').then(d=>{
-if(!d.running&&d.result){clearInterval(pollInterval);pollInterval=null;setRunningState(false);renderResults(d.result)}})},2000)}
+pollInterval=setInterval(()=>{api('/api/campaign/status').then(d=>{if(!d.running&&d.result){clearInterval(pollInterval);pollInterval=null;setRunningState(false);renderResults(d.result)}})},2000)}
 function loadStatus(){api('/api/campaign/status').then(d=>{if(d.result)renderResults(d.result)})}
+
 function updateMonitor(t){document.getElementById('livePhase').textContent=t.phase_id;
 document.getElementById('liveElapsed').textContent=t.elapsed.toFixed(0)+'s';
 document.getElementById('liveTarget').textContent=t.target_mbps.toFixed(0);
@@ -234,13 +517,14 @@ const pct=t.target_mbps>0?Math.min(100,(t.actual_mbps/t.target_mbps)*100):0;
 const bar=document.getElementById('liveProgress');bar.style.width=pct+'%';
 bar.className='progress-bar '+({ramp_up:'yellow',steady:'green',ramp_down:'cyan'}[t.ramp_phase]||'cyan');
 document.getElementById('liveRamp').textContent=t.ramp_phase.toUpperCase()+' | '+t.status.toUpperCase();
-if(t.node_tx){let h='';for(const[nid,tx]of Object.entries(t.node_tx)){const nCnt=Object.keys(t.node_tx).length;
+if(t.node_tx){let h='';for(const[nid,tx]of Object.entries(t.node_tx)){const nc=Object.keys(t.node_tx).length;
 h+=`<div class="node-live"><h4>${nid}</h4><div class="rate">${tx.toFixed(1)} <small>Mbps</small></div>
-<div class="progress-wrap"><div class="progress-bar green" style="width:${Math.min(100,(tx/(t.target_mbps/nCnt))*100)}%"></div></div></div>`}
+<div class="progress-wrap"><div class="progress-bar green" style="width:${Math.min(100,(tx/(t.target_mbps/nc))*100)}%"></div></div></div>`}
 document.getElementById('nodeMonitors').innerHTML=h}
 const log=document.getElementById('tickLog'),line=document.createElement('div');line.className='tick-line';
 line.textContent=`[${t.elapsed.toFixed(0)}s] ${t.phase_id} | ${t.actual_mbps.toFixed(1)}/${t.target_mbps.toFixed(1)} Mbps | ${t.ramp_phase}`;
 log.appendChild(line);log.scrollTop=log.scrollHeight}
+
 function renderResults(r){document.getElementById('resultContent').innerHTML=`
 <div class="card-grid"><div class="stat"><div class="val">${r.campaign_id||'-'}</div><div class="lbl">Campaign</div></div>
 <div class="stat"><div class="val">${(r.phase_results||[]).length}</div><div class="lbl">Phases Run</div></div>
@@ -257,12 +541,15 @@ document.getElementById('enforcementCard').style.display='block';
 document.getElementById('enforcementBody').innerHTML=d.events.map(e=>
 `<tr><td style="font-size:11px">${e.timestamp}</td><td>${e.node_id}</td><td>${e.phase_id}</td>
 <td>${e.measured_mbps} Mbps</td><td>${e.limit_mbps} Mbps</td><td>${statusBadge(e.action)}</td></tr>`).join('')}})}
+
 function setRunningState(running){const b=document.getElementById('statusBadge'),k=document.getElementById('killBtn');
 if(running){b.className='status-badge status-running';b.textContent='RUNNING';k.classList.add('pulsing')}
 else{b.className='status-badge status-done';b.textContent='COMPLETE';k.classList.remove('pulsing')}}
+
 function loadAudit(){api('/api/audit').then(d=>{const tb=document.getElementById('auditBody');
 if(!d.entries||!d.entries.length){tb.innerHTML='<tr><td colspan="5" style="color:var(--text2)">No entries</td></tr>';return}
 tb.innerHTML=d.entries.map(e=>`<tr><td style="font-size:11px">${e.timestamp}</td><td>${e.actor}</td>
 <td>${e.action}</td><td>${e.detail}</td><td>${e.phase_id||'-'}</td></tr>`).join('')})}
+
 window.addEventListener('load',()=>{loadCampaign();setTimeout(loadTargets,500)});
 </script></body></html>
