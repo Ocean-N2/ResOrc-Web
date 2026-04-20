@@ -163,7 +163,16 @@ td{padding:8px 12px;border-bottom:1px solid #21262d}tr:hover{background:#1c2333}
 <!-- Nodes Editor -->
 <div class="editor-section"><div class="editor-header" onclick="toggleEditor(this)"><h2>&#128421; Nodes Editor</h2><span class="toggle">&#9660;</span></div>
 <div class="editor-body open" id="edNodes">
-<table><thead><tr><th>Node ID</th><th>Host</th><th>Port</th><th>Role</th><th>Max Rate</th><th>Auth Token</th><th>Actions</th></tr></thead>
+<table><thead><tr>
+<th>Node ID</th>
+<th>Host</th>
+<th>Port</th>
+<th>Role</th>
+<th>Max Rate</th>
+<th>Health</th>
+<th>Last Check</th>
+<th>Actions</th>
+</tr></thead>
 <tbody id="edNodesBody"></tbody></table>
 <button class="btn-sm btn-add" style="margin-top:12px" onclick="showAddNodeForm()">+ Add Node</button>
 <div id="addNodeForm" style="display:none" class="inline-form">
@@ -171,8 +180,8 @@ td{padding:8px 12px;border-bottom:1px solid #21262d}tr:hover{background:#1c2333}
 <div class="form-group"><label>Host</label><input id="anHost" placeholder="10.20.0.13"></div>
 <div class="form-group"><label>Port</label><input id="anPort" type="number" value="4501"></div></div>
 <div class="form-row3"><div class="form-group"><label>Role</label><select id="anRole"><option value="trex">TRex</option><option value="mhddos">MHDDoS</option></select></div>
-<div class="form-group"><label>Max Rate (Mbps)</label><input id="anRate" type="number" value="1000"></div>
-<div class="form-group"><label>Auth Token</label><input id="anToken" placeholder="secret-token"></div></div>
+<div class="form-group"><label>Max Rate (Mbps)</label><input id="anRate" type="number" value="1000"></div> 
+<!-- <div class="form-group"><label>Auth Token</label><input id="anToken" placeholder="secret-token"></div> --> </div> 
 <div style="display:flex;gap:8px;margin-top:8px"><button class="btn-sm btn-add" onclick="addNode()">Add Node</button>
 <button class="btn-sm btn-cancel" onclick="hideAddNodeForm()">Cancel</button></div>
 </div></div></div>
@@ -182,6 +191,7 @@ td{padding:8px 12px;border-bottom:1px solid #21262d}tr:hover{background:#1c2333}
 <div class="editor-body open" id="edTargets">
 <table><thead><tr><th>#</th><th>Address</th><th>Type</th><th>Port</th><th>Actions</th></tr></thead>
 <tbody id="edTargetsBody"></tbody></table>
+<button class="btn-sm btn-edit" onclick="checkEditorNodesHealth()">Check Health Now</button>
 <div style="display:flex;gap:8px;margin-top:12px;align-items:flex-end">
 <div class="form-group" style="flex:1;margin-bottom:0"><label>Add Target(s)</label>
 <input id="addTargetInput" placeholder="192.168.1.100 or https://example.com"></div>
@@ -272,7 +282,7 @@ td{padding:8px 12px;border-bottom:1px solid #21262d}tr:hover{background:#1c2333}
 <div class="form-group"><label>Port</label><input id="enPort" type="number"></div></div>
 <div class="form-row3"><div class="form-group"><label>Role</label><select id="enRole"><option value="trex">TRex</option><option value="mhddos">MHDDoS</option></select></div>
 <div class="form-group"><label>Max Rate (Mbps)</label><input id="enRate" type="number"></div>
-<div class="form-group"><label>Auth Token</label><input id="enToken"></div></div>
+<!-- <div class="form-group"><label>Auth Token</label><input id="enToken"></div> --!> </div>
 <input type="hidden" id="enId">
 <div class="modal-btns"><button class="btn-run" onclick="saveEditNode()">Save</button>
 <button class="btn-cancel" onclick="document.getElementById('editNodeModal').classList.remove('show')">Cancel</button></div>
@@ -281,6 +291,13 @@ td{padding:8px 12px;border-bottom:1px solid #21262d}tr:hover{background:#1c2333}
 <div class="toast-container" id="toasts"></div>
 
 <script>
+function timeAgo(ts) {
+    if (!ts) return '-';
+    const diff = Math.floor(Date.now() / 1000 - ts);
+    if (diff < 60) return diff + "s ago";
+    if (diff < 3600) return Math.floor(diff/60) + "m ago";
+    return Math.floor(diff/3600) + "h ago";
+}
 let campaignData=null,eventSource=null,pollInterval=null;
 function toast(m,t='info'){const c=document.getElementById('toasts'),e=document.createElement('div');e.className='toast '+t;e.textContent=m;c.appendChild(e);setTimeout(()=>e.remove(),4000)}
 function api(u,o={}){return fetch(u,{headers:{'Content-Type':'application/json'},...o}).then(r=>r.json())}
@@ -345,21 +362,39 @@ if(d.ok)toast('Campaign saved to YAML','success');else toast(d.error,'error')})}
 
 /* ── Nodes CRUD ── */
 function renderEditorNodes(){if(!campaignData)return;const tb=document.getElementById('edNodesBody');
-tb.innerHTML=campaignData.nodes.map(n=>`<tr>
-<td><b>${n.node_id}</b></td><td>${n.host}</td><td>${n.port}</td><td>${roleBadge(n.role)}</td>
-<td>${n.max_rate_mbps}</td><td style="font-size:11px;color:var(--text2)">${n.auth_token?'****'+n.auth_token.slice(-4):'none'}</td>
+tb.innerHTML=campaignData.nodes.map(n=>
+`<tr>
+<td><b>${n.node_id}</b></td>
+<td>${n.host}</td>
+<td>${n.port}</td>
+<td>${roleBadge(n.role)}</td>
+<td>${n.max_rate_mbps}</td>
+<td>${statusBadge(n.status || n.health_status)}</td>
+<td>${n.last_healthcheck ? timeAgo(n.last_healthcheck) : '-'}</td>
 <td class="actions-cell"><button class="btn-sm btn-edit" onclick="editNode('${n.node_id}')">Edit</button>
 <button class="btn-sm btn-del" onclick="deleteNode('${n.node_id}')">Del</button></td></tr>`).join('')}
 
 function showAddNodeForm(){document.getElementById('addNodeForm').style.display='block'}
 function hideAddNodeForm(){document.getElementById('addNodeForm').style.display='none'}
 
+function checkEditorNodesHealth() {
+    api('/api/nodes/health', {method:'POST'})
+    .then(d => {
+        if (d.ok) {
+            campaignData.nodes = d.nodes;
+            renderEditorNodes();
+            toast('Health updated', 'success');
+        }
+    });
+}
+
 function addNode(){
 api('/api/nodes/add',{method:'POST',body:JSON.stringify({
 node_id:document.getElementById('anId').value,host:document.getElementById('anHost').value,
 port:parseInt(document.getElementById('anPort').value),role:document.getElementById('anRole').value,
 max_rate_mbps:parseFloat(document.getElementById('anRate').value),
-auth_token:document.getElementById('anToken').value})}).then(d=>{
+//auth_token:document.getElementById('anToken').value
+})}).then(d=>{
 if(d.ok){refreshCampaign();hideAddNodeForm();toast('Node added','success')}else toast(d.error,'error')})}
 
 function editNode(nid){const n=campaignData.nodes.find(x=>x.node_id===nid);if(!n)return;
@@ -372,7 +407,8 @@ function saveEditNode(){const nid=document.getElementById('enId').value;
 api(`/api/nodes/${nid}`,{method:'PUT',body:JSON.stringify({
 host:document.getElementById('enHost').value,port:parseInt(document.getElementById('enPort').value),
 role:document.getElementById('enRole').value,max_rate_mbps:parseFloat(document.getElementById('enRate').value),
-auth_token:document.getElementById('enToken').value})}).then(d=>{
+//auth_token:document.getElementById('enToken').value
+})}).then(d=>{
 if(d.ok){refreshCampaign();document.getElementById('editNodeModal').classList.remove('show');toast('Node updated','success')}else toast(d.error,'error')})}
 
 function deleteNode(nid){if(!confirm(`Delete node ${nid}?`))return;
