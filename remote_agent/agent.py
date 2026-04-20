@@ -116,19 +116,22 @@ def audit_log(action: str, detail: str = "") -> None:
 
 # ── Auth Middleware ─────────────────────────────────────────────────
 
+
 def require_auth(fn):
-    """Decorator: reject requests without a valid auth token."""
     @wraps(fn)
     def wrapper(*args, **kwargs):
         token = request.headers.get("X-Auth-Token", "")
-        if S.auth_token and token != S.auth_token:
-            audit_log("auth_failure", f"Invalid token from {request.remote_addr}")
-            return jsonify({"ok": False, "error": "unauthorized"}), 401
-        # Update heartbeat on every authenticated request
+        # Only enforce authentication if a token is configured
+        if S.auth_token:
+            if token != S.auth_token:
+                audit_log("auth_failure", f"Invalid token from ")
+                return jsonify({"ok": False, "error": "unauthorized"}), 401
+        # Update heartbeat on every request (authenticated or not)
         S.last_heartbeat = time.monotonic()
         S.deadman_triggered = False
         return fn(*args, **kwargs)
     return wrapper
+
 
 # ── TRex Helpers ───────────────────────────────────────────────────
 
