@@ -244,22 +244,46 @@ def api_nodes_get():
     nm = _state["nm"]
     if nm is None:
         return jsonify({"ok": True, "nodes": []})
-    nodes = [{"node_id": n.node_id, "host": n.host, "port": n.port,
-              "role": n.role.value, "max_rate_mbps": n.max_rate_mbps,
-              "status": n.status.value, "auth_token": n.auth_token} for n in nm.all_nodes]
+    nodes = []
+    for n in nm.all_nodes:
+        nodes.append({
+            "node_id": n.node_id,
+            "host": n.host,
+            "port": n.port,
+            "role": n.role.value,
+            "max_rate_mbps": n.max_rate_mbps,
+            "auth_token": n.auth_token,
+            "status": getattr(n, "health_status", n.status.value),
+            "last_healthcheck": getattr(n, "last_healthcheck", None)
+        })
     return jsonify({"ok": True, "nodes": nodes})
 
 
-@app.route("/api/nodes/health", methods=["POST"])
+app.route("/api/nodes/health", methods=["POST"])
 def api_nodes_health():
     nm = _state["nm"]
     if nm is None:
         return jsonify({"ok": False, "error": "No campaign loaded"}), 404
+
     health = nm.check_health_all()
-    nodes = [{"node_id": n.node_id, "host": n.host, "port": n.port,
-              "role": n.role.value, "max_rate_mbps": n.max_rate_mbps,
-              "status": n.status.value, "auth_token": n.auth_token} for n in nm.all_nodes]
-    return jsonify({"ok": True, "health": health, "nodes": nodes})
+    now = time.time()
+    nodes = []
+    for n in nm.all_nodes:
+        status = "online" if health.get(n.node_id) else "offline"
+        n.last_healthcheck = now
+        n.health_status = status
+        nodes.append({
+            "node_id": n.node_id,
+            "host": n.host,
+            "port": n.port,
+            "role": n.role.value,
+            "max_rate_mbps": n.max_rate_mbps,
+            "auth_token": n.auth_token,
+            "status": status,
+            "last_healthcheck": now
+        })
+    return jsonify({"ok": True, "nodes": nodes})
+
 
 
 @app.route("/api/nodes/add", methods=["POST"])
